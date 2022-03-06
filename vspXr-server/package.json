@@ -12,6 +12,13 @@
   "author": "mwacker",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/http-errors": "^1.8.2",
     "@types/node": "^17.0.21"
+  },
+  "dependencies": {
+    "express": "^4.17.3",
+    "http-errors": "^2.0.0",
+    "moment": "^2.29.1"
   }
 }
