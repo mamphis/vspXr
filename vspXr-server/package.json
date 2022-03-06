@@ -1,0 +1,17 @@
+{
+  "name": "vspxr-server",
+  "version": "0.1.0",
+  "description": "The server that stores the vsix files and enables the search and interaction with private extensions",
+  "main": "out/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "extension"
+  ],
+  "author": "mwacker",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.21"
+  }
+}
