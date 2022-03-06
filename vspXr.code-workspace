@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "vspXr-cli"
+		},
+		{
+			"path": "vspXr-extension"
+		},
+		{
+			"path": "vspXr-server"
+		}
+	],
+	"settings": {}
+}
