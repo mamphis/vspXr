@@ -14,11 +14,16 @@
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/http-errors": "^1.8.2",
+    "@types/multer": "^1.4.7",
     "@types/node": "^17.0.21"
   },
   "dependencies": {
     "express": "^4.17.3",
+    "fast-xml-parser": "^4.0.5",
     "http-errors": "^2.0.0",
-    "moment": "^2.29.1"
+    "jszip": "^3.7.1",
+    "moment": "^2.29.1",
+    "multer": "^1.4.4",
+    "typeorm": "^0.2.45"
   }
 }

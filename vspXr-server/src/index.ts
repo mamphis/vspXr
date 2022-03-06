@@ -1,8 +1,9 @@
+import { Database } from "./data/database";
 import { addConsoleAppender } from "./lib/logger";
 import { Server } from "./server/server";
 
 addConsoleAppender();
-
+let database: Database;
 async function start() {
     const server = new Server(8000);
 
@@ -12,3 +13,5 @@ async function start() {
 }
 
 start();
+
+export { database };
