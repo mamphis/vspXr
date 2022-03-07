@@ -13,13 +13,17 @@ export class Logger {
     verbose(message: string, ...args: any[]) {
         this.log(LogLevel.Verbose, message, ...args);
     }
-    
+
     debug(message: string, ...args: any[]) {
         this.log(LogLevel.Debug, message, ...args);
     }
 
     info(message: string, ...args: any[]) {
         this.log(LogLevel.Info, message, ...args);
+    }
+
+    warn(message: string, ...args: any[]) {
+        this.log(LogLevel.Warn, message, ...args);
     }
 
     error(message: string, ...args: any[]): void;

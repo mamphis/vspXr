@@ -1,0 +1,1 @@
+export { VsixManager } from './vsixmanager';

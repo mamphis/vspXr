@@ -4,6 +4,7 @@ import { Appender } from "./appender";
 import { ConsoleAppender } from "./consoleappender";
 import { Logger } from "./logger";
 import { LogLevel } from "./loglevel";
+import { TypeOrmLogger } from "./typeormlogger";
 
 export class LogManager {
 
@@ -24,6 +25,12 @@ export class LogManager {
 
     static getLogger(className: string): Logger {
         const logger = new Logger(LogManager.the, className);
+
+        return logger;
+    }
+
+    static typeorm(): TypeOrmLogger {
+        const logger = new TypeOrmLogger(LogManager.the);
 
         return logger;
     }
