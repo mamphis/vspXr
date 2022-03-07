@@ -42,7 +42,7 @@ export class LogManager {
         return async (req, res, next) => {
             const start = moment();
             await next();
-            let logMessage = `(${expressOptions.className}): ${req.method} ${req.path} took ${moment().diff(start)}ms => ${res.statusCode}`;
+            let logMessage = `(${expressOptions.className}): ${req.method} ${req.originalUrl} took ${moment().diff(start)}ms => ${res.statusCode}`;
             if (LogManager.the.minimumLogLevel <= LogLevel.Debug) {
                 logMessage += ` [Requester: ${req.ip}, Hostname: ${req.hostname}, Statusmessage: ${res.statusMessage}]`
             }

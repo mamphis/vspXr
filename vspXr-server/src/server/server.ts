@@ -1,6 +1,8 @@
-import express, { Application, json, urlencoded, Request, Response, NextFunction } from "express";
-import { NotFound, isHttpError } from 'http-errors';
-import { LogManager, LogLevel } from "../lib/logger";
+import express, { Application, json, NextFunction, Request, Response, urlencoded } from "express";
+import { isHttpError, NotFound } from 'http-errors';
+import { LogManager } from "../lib/logger";
+import infoRouter from './routes/info.router';
+import vsixRouter from './routes/vsix.router';
 
 export class Server {
     private app: Application;
@@ -17,11 +19,16 @@ export class Server {
         }));
 
         this.app.use(LogManager.express());
+
+        this.app.use('/info', infoRouter);
+        this.app.use('/vsix', vsixRouter);
+
         this.app.use((req, res, next) => {
-            next(new NotFound(`${req.path} was not found.`));
+            next(new NotFound(`${req.originalUrl} was not found.`));
         });
 
         this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+            this.logger.error(err);
             if (isHttpError(err)) {
                 return res.status(err.status).json(err);
             }

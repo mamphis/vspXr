@@ -1,4 +1,4 @@
-import { DeepPartial, FindConditions, FindOneOptions, ObjectLiteral } from 'typeorm';
+import { DeepPartial, FindConditions, FindManyOptions, FindOneOptions, ObjectLiteral } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Vsix } from '../model/vsix';
 import { VsixVersion } from '../model/vsixversion';
@@ -18,7 +18,7 @@ export interface BasicDAO<T> {
     delete(id: string): Promise<void>;
     create(value: QueryDeepPartialEntity<T>): Promise<ObjectLiteral[]>;
     save(value: DeepPartial<T>): Promise<T>;
-    find(search: FindConditions<T>): Promise<T[]>;
+    find(search: FindConditions<T> | FindManyOptions<T>): Promise<T[]>;
 }
 
 export interface VsixDAO extends BasicDAO<Vsix> {

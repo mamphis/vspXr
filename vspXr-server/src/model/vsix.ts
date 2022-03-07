@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { VsixVersion } from "./vsixversion";
 
 @Entity()
@@ -12,6 +12,6 @@ export class Vsix {
     @Column()
     name!: string;
 
-    @ManyToOne(() => VsixVersion, version => version.vsix, { eager: true })
+    @OneToMany(() => VsixVersion, version => version.vsix, { eager: true })
     versions!: VsixVersion[];
 }

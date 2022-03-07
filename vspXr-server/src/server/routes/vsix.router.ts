@@ -19,7 +19,12 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
         const vsixBuffer = await readFile(req.file.path);
         const vsix = await VsixManager.the.parseVsixData(vsixBuffer);
 
-        return res.json(await VsixManager.the.store(req.file, vsix));
+        const version = await VsixManager.the.store(req.file, vsix).catch(err => next(
+            new BadRequest(err))
+        );
+        if (version) {
+            return res.json(version);
+        }
     } catch (e: any) {
         return next(new InternalServerError(e));
     }
