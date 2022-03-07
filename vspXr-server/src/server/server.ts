@@ -3,6 +3,7 @@ import { isHttpError, NotFound } from 'http-errors';
 import { LogManager } from "../lib/logger";
 import infoRouter from './routes/info.router';
 import vsixRouter from './routes/vsix.router';
+import cors from 'cors';
 
 export class Server {
     private app: Application;
@@ -14,6 +15,7 @@ export class Server {
 
     async init(): Promise<void> {
         this.app.use(json());
+        this.app.use(cors());
         this.app.use(urlencoded({
             extended: false,
         }));

@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "vspXr-server"
+		},
+		{
+			"path": "vspXr-extension/vspXr-ui"
 		}
 	],
 	"settings": {}

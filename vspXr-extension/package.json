@@ -14,6 +14,18 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"configuration": {
+			"title": "vspXr",
+			"properties": {
+				"vspXr.privateRegistries": {
+					"type": "array",
+					"default": [
+						"http://localhost:3000"
+					],
+					"description": "The private registries you want to query"
+				}
+			}
+		},
 		"viewsContainers": {
 			"activitybar": [
 				{
@@ -27,7 +39,9 @@
 			"vspXr-extension-explorer": [
 				{
 					"id": "vspXr-extension-explorer-view",
-					"name": "Extension Explorer"
+					"name": "Extension Explorer",
+					"visibility": "visible",
+					"type": "webview"
 				}
 			]
 		}
@@ -42,7 +56,8 @@
 		"pretest": "npm run compile-tests && npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
-		"build-ui": "npm run build --prefix vspXr-ui/"
+		"build-ui": "npm run build --prefix vspXr-ui/",
+		"install-ui": "npm install --prefix vspXr-ui/"
 	},
 	"devDependencies": {
 		"@types/vscode": "^1.65.0",
