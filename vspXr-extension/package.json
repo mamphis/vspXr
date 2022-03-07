@@ -1,5 +1,5 @@
 {
-  "name": "vspxr-extension",
+	"name": "vspxr-extension",
 	"displayName": "vspXr-extension",
 	"description": "Extension to interact with the private extension server of vspXr",
 	"version": "0.0.1",
@@ -10,16 +10,27 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:vspxr-extension.helloWorld"
+		"onStartupFinished"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "vspxr-extension.helloWorld",
-				"title": "Hello World"
-			}
-		]
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "vspXr-extension-explorer",
+					"title": "Extension Explorer",
+					"icon": "res/privateExtension.svg"
+				}
+			]
+		},
+		"views": {
+			"vspXr-extension-explorer": [
+				{
+					"id": "vspXr-extension-explorer-view",
+					"name": "Extension Explorer"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
@@ -30,7 +41,8 @@
 		"watch-tests": "tsc -p . -w --outDir out",
 		"pretest": "npm run compile-tests && npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
+		"test": "node ./out/test/runTest.js",
+		"build-ui": "npm run build --prefix vspXr-ui/"
 	},
 	"devDependencies": {
 		"@types/vscode": "^1.65.0",
