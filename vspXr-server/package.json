@@ -4,7 +4,8 @@
   "description": "The server that stores the vsix files and enables the search and interaction with private extensions",
   "main": "out/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "tsc -w"
   },
   "keywords": [
     "extension"
@@ -12,6 +13,22 @@
   "author": "mwacker",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^17.0.21"
+    "@types/express": "^4.17.13",
+    "@types/http-errors": "^1.8.2",
+    "@types/multer": "^1.4.7",
+    "@types/node": "^17.0.21",
+    "@types/pkginfo": "^0.4.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "fast-xml-parser": "^4.0.5",
+    "http-errors": "^2.0.0",
+    "jszip": "^3.7.1",
+    "moment": "^2.29.1",
+    "multer": "^1.4.4",
+    "pkginfo": "^0.4.1",
+    "sqlite3": "^4.2.0",
+    "typeorm": "^0.2.41"
   }
 }
