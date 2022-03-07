@@ -15,7 +15,7 @@ export class SqliteDatabase implements Database {
 
     async init(): Promise<void> {
         const connection = await createConnection({
-            type: 'sqlite',
+            type: 'better-sqlite3',
             database: this.dataPath,
             entities: [
                 "out/model/**/*{.ts,.js}",

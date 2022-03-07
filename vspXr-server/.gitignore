@@ -1,4 +1,4 @@
-packages.db
+packages.db*
 .env
 
 packages/**
