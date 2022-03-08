@@ -1,4 +1,6 @@
-import { CancellationToken, Uri, ViewColumn, Webview, WebviewPanel, WebviewPanelOnDidChangeViewStateEvent, WebviewView, WebviewViewProvider, WebviewViewResolveContext, window, workspace } from 'vscode';
+import axios from 'axios';
+import { CancellationToken, extensions, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, workspace } from 'vscode';
+
 export class ExtensionPanel implements WebviewViewProvider {
     constructor(private extensionUri: Uri) {
     }
@@ -10,17 +12,53 @@ export class ExtensionPanel implements WebviewViewProvider {
         };
         webviewView.webview.html = this.getHtmlContent(webviewView.webview);
 
+        let registries: string[] = [];
         function updateRegistries() {
             const configSection = workspace.getConfiguration('vspXr');
-            const registries = configSection.get('privateRegistries', ['http://localhost:3000']);
-
-            webviewView.webview.postMessage({ type: 'setRegistries', content: registries });
+            registries = configSection.get('privateRegistries', ['http://localhost:3000']);
         }
+
         workspace.onDidChangeConfiguration((configChangeEvent) => {
             if (configChangeEvent.affectsConfiguration('vspXr.privateRegistries')) {
                 updateRegistries();
             }
         })
+
+
+        webviewView.webview.onDidReceiveMessage((message) => {
+            if ('search' in message) {
+                Promise.all(registries.map((registry) => {
+                    const url = new URL("vsix", registry);
+                    url.searchParams.set("query", message.search);
+
+                    return axios.get(url.toString())
+                        .then((r) => r.data.map((ext: any) => {
+                            return {
+                                ...ext,
+                                icon: new URL(`assets/${ext.id}/icon`, registry).toString(),
+                            }
+                        }))
+                        .catch((error) => {
+                            console.warn(
+                                `Cannot request registry [${registry}]: ${error}`
+                            );
+                            return [];
+                        });
+                })).then((exts: any[][]) => {
+                    exts = exts.flatMap(ext => {
+                        return ext.map(e => ({
+                            ...e,
+                            installed: !!extensions.getExtension(`${e.publisher}.${e.id}`),
+                        }));
+                    });
+                    webviewView.webview.postMessage({ type: 'setExtensions', content: exts });
+                });
+            }
+
+            if ('install' in message) {
+                console.log(message.install);
+            }
+        });
 
         webviewView.webview.postMessage({ type: 'setSearchValue', content: '' });
         updateRegistries();

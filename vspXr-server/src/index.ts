@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { mkdir } from 'fs/promises';
 dotenv.config();
 
 import { Database, SqliteDatabase } from "./data/";
@@ -13,6 +14,8 @@ async function start() {
     database = new SqlJsDatabase(process.env.SQLJS_DATABASE)
 
     await database.init();
+
+    await mkdir(process.env.ASSET_PATH, { recursive: true });
 
     await server.init();
     await server.start();

@@ -3,3 +3,4 @@ packages.db*
 
 packages/**
 upload/**
+assets/**

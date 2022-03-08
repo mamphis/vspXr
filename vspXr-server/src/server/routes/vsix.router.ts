@@ -8,9 +8,9 @@ import { Like } from "typeorm";
 import { compare } from 'semver';
 
 const router = Router();
-
-
-const upload = multer({ dest: process.env.TEMP_UPLOAD_PATH });
+const upload = multer({
+    dest: process.env.TEMP_UPLOAD_PATH
+});
 router.use(upload.single('vsix'));
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -32,7 +32,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
             return next(new InternalServerError('Cannot insert version'));
         }
     } catch (e: any) {
-        return next(new InternalServerError(e));
+        return next(new InternalServerError(e.toString()));
     }
 });
 
@@ -48,7 +48,6 @@ router.get('/', async (req, res, next) => {
     if (result) {
         return res.json(result.map(vsix => {
             const latestVersion = vsix.versions.sort((c1, c2) => compare(c2.version, c1.version))[0];
-            console.log(latestVersion);
             return {
                 id: vsix.id,
                 name: vsix.name,

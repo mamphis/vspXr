@@ -4,4 +4,6 @@ export interface Extension {
     description: string;
     publisher: string;
     version: string;
+    installed: boolean;
+    icon: string;
 }

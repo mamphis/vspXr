@@ -1,5 +1,4 @@
 <script setup="{emit}" lang="ts">
-import { Extension } from "../model/extension";
 import { onMounted, ref } from "vue";
 import { vscode } from "../lib/vscode";
 let state = vscode.getState();
@@ -13,6 +12,7 @@ let registries: string[] = [];
 
 onMounted(() => {
     searchInput.value?.focus();
+    sendRequest();
 });
 
 window.addEventListener("message", (ev) => {
@@ -23,8 +23,8 @@ window.addEventListener("message", (ev) => {
             searchvalue.value = content;
             sendRequest();
             break;
-        case "setRegistries":
-            registries = content;
+        case "setExtensions":
+            loading.value = false;
             break;
     }
 });
@@ -35,31 +35,9 @@ function sendRequest() {
         return;
     }
     lastSendValue = searchvalue.value;
-    console.log("Sending request: " + searchvalue.value);
-
     loading.value = true;
 
-    Promise.all(
-        registries.map((registry) => {
-            const url = new URL("vsix", registry);
-            url.searchParams.set("query", searchvalue.value);
-
-            return fetch(url.toString())
-                .then((r) => r.json() as unknown as Extension[])
-                .catch((error) => {
-                    console.warn(
-                        `Cannot request registry [${registry}]: ${error}`
-                    );
-                    return [] as Extension[];
-                });
-        })
-    ).then((extensions) => {
-        emit(
-            "searchResult",
-            extensions.flatMap((e) => e)
-        );
-        loading.value = false;
-    });
+    vscode.postMessage({ search: lastSendValue });
 }
 
 function onKeyUp() {
@@ -73,12 +51,6 @@ function onKeyDown() {
         clearTimeout(typingTimer);
     }
 }
-
-const emit = defineEmits<{
-    (e: "searchResult", searchvalue: Extension[]): void;
-}>();
-
-console.log("Search bar mounted...");
 </script>
 <template>
     <div class="textbar">

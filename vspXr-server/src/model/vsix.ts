@@ -13,7 +13,7 @@ export class Vsix {
     name!: string;
 
     @Column()
-    icon?: string;
+    icon!: string;
 
     @OneToMany(() => VsixVersion, version => version.vsix, { eager: true })
     versions!: VsixVersion[];

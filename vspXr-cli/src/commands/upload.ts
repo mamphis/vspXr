@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import FormData from 'form-data';
 import { readdir, readFile, stat } from "fs/promises";
-import { extname } from "path";
+import { basename, extname } from "path";
 import { compare, SemVer } from "semver";
 import { URL } from "url";
 import { Argv } from "yargs";
@@ -55,18 +55,20 @@ const uploadCommand = async (args: UploadCommandArgs) => {
     const { name: registryName } = response.data;
 
     const formdata = new FormData();
-    formdata.append('vsix', await readFile(vsixFile), { filename: vsixFile });
+    const vsixContent = await readFile(vsixFile);
+    formdata.append('vsix', vsixContent, { filename: basename(vsixFile) });
     const uploadResponse: AxiosResponse = await axios.post(new URL('/vsix', registry).toString(),
         formdata,
         {
             onUploadProgress: (ev) => {
                 console.log(ev);
             },
+            maxBodyLength: vsixContent.length * 2,
             headers: {
                 ...formdata.getHeaders(),
             },
         }).catch(e => {
-            return e.response;
+            return e.response ?? { status: 0, data: { message: e.message } };
         });
 
     if (uploadResponse.status === 200) {

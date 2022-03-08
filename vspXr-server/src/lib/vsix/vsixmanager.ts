@@ -1,13 +1,14 @@
-import jszip from 'jszip';
+import axios from 'axios';
+import { createHash } from 'crypto';
 import { XMLParser } from 'fast-xml-parser';
-import { VSIX } from './vsix.xml';
+import { mkdir, rename, writeFile } from 'fs/promises';
+import jszip, { file } from 'jszip';
+import { extname, join } from 'path';
+import { database } from '../..';
 import { Vsix } from '../../model/vsix';
 import { VsixVersion } from '../../model/vsixversion';
-import { database } from '../..';
-import { join } from 'path';
-import { mkdir, rename, unlink } from 'fs/promises';
-import { LogManager } from '../logger';
-import { Logger } from '../logger';
+import { Logger, LogManager } from '../logger';
+import { VSIX } from './vsix.xml';
 
 function select<T, K extends keyof T>(value: T, ...keys: K[]): Partial<T> {
     return keys.reduce((partial, key) => {
@@ -16,6 +17,11 @@ function select<T, K extends keyof T>(value: T, ...keys: K[]): Partial<T> {
     }, {} as Partial<T>);
 }
 
+function md5(input: string) {
+    const hash = createHash('md5');
+    hash.update(input);
+    return hash.digest().toString('hex');
+}
 
 export class VsixManager {
 
@@ -45,7 +51,7 @@ export class VsixManager {
 
         const vsixData = parser.parse(xml) as VSIX;
         const vsix = new Vsix();
-
+        
         vsix.publisher = vsixData.PackageManifest.Metadata.Identity.Publisher;
         vsix.id = vsixData.PackageManifest.Metadata.Identity.Id;
         vsix.name = vsixData.PackageManifest.Metadata.DisplayName;
@@ -55,7 +61,19 @@ export class VsixManager {
         vsixVersion.description = vsixData.PackageManifest.Metadata.Description['#text'];
         vsix.versions = [vsixVersion];
 
+        const iconAsset = vsixData.PackageManifest.Assets.Asset.find(a => a.Type === 'Microsoft.VisualStudio.Services.Icons.Default');
+        let iconBuffer: Uint8Array;
+        if (iconAsset) {
+            iconBuffer = await data.files[iconAsset.Path].async('uint8array');
+        } else {
+            iconBuffer = (await axios.get(`https://www.gravatar.com/avatar/${md5(vsix.publisher + vsix.id)}?s=64`)).data;
+        }
 
+        const extension = extname(iconAsset?.Path ?? 'gravatar.jpg');
+        // Do not include the version in the filename because only the newest is shown.
+        const filename = join(process.env.ASSET_PATH, `${vsix.publisher}.${vsix.id}${extension}`);
+        await writeFile(filename, iconBuffer);
+        vsix.icon = filename;
 
         return vsix;
     }
@@ -77,7 +95,7 @@ export class VsixManager {
 
                 newVsix = insertedVsix;
             } else {
-                await database.vsix.update(vsixDefinition.id, { ...select(vsixDefinition, 'name', 'publisher') })
+                await database.vsix.update(vsixDefinition.id, { ...select(vsixDefinition, 'name', 'publisher', 'icon') })
             }
 
             // Test if a version is present.
@@ -113,8 +131,8 @@ export class VsixManager {
             await rename(file.path, join(storagePath, newVersion.filename));
 
             return newVersion;
-        } catch (e) {
-            throw e;
+        } catch (e: any) {
+            return Promise.reject(e.toString());
         }
     }
 }
