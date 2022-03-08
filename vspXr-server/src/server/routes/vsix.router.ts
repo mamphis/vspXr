@@ -5,6 +5,7 @@ import { VsixManager } from "../../lib/vsix";
 import multer from "multer";
 import { database } from "../..";
 import { Like } from "typeorm";
+import { compare } from 'semver';
 
 const router = Router();
 
@@ -24,8 +25,11 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
         const version = await VsixManager.the.store(req.file, vsix).catch(err => next(
             new BadRequest(err))
         );
+
         if (version) {
             return res.json(version);
+        } else {
+            return next(new InternalServerError('Cannot insert version'));
         }
     } catch (e: any) {
         return next(new InternalServerError(e));
@@ -33,27 +37,27 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.get('/', async (req, res, next) => {
-    return res.json([{
-        id: '1',
-        name: 'string',
-        description: 'string',
-        publisher: 'string',
-        version: 'string'
-    }, {
-        id: '2',
-        name: 'modus-elo-dev',
-        description: 'string',
-        publisher: 'modus',
-        version: '0.1.0'
-    },
-    ])
     const searchQuery = req.query.query;
-    res.json(await database.vsix.find({
+    const result = await database.vsix.find({
         where: [
             { name: Like(`%${searchQuery}%`) },
             { publisher: Like(`%${searchQuery}%`) }
         ]
-    }).catch(next));
+    }).catch(() => next());
+
+    if (result) {
+        return res.json(result.map(vsix => {
+            const latestVersion = vsix.versions.sort((c1, c2) => compare(c2.version, c1.version))[0];
+            console.log(latestVersion);
+            return {
+                id: vsix.id,
+                name: vsix.name,
+                description: latestVersion.description,
+                publisher: vsix.publisher,
+                version: latestVersion.version
+            }
+        }));
+    }
 });
 
 

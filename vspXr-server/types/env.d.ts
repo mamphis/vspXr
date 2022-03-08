@@ -3,6 +3,7 @@ declare namespace NodeJS {
         TEMP_UPLOAD_PATH: string;
         PACKAGE_STORAGE_PATH: string;
         SQLITE_DATABASE: string;
+        SQLJS_DATABASE: string;
         SERVER_PORT: number;
         REGISTRY_NAME: string;
     }

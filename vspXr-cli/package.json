@@ -7,8 +7,7 @@
     "vspxr": "out/cli.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "npm ci"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "cli"

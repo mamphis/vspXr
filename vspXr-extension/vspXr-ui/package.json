@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "install": "npm ci"
+    "preview": "vite preview"
   },
   "dependencies": {
+    "vspxr-extension": "file:..",
     "vue": "^3.2.25"
   },
   "devDependencies": {

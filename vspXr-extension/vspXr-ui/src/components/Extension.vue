@@ -9,7 +9,7 @@ const props = defineProps<{ extension: Extension }>();
         <div id="info">
             <div id="name">{{ extension.name }}</div>
             <div id="short-description">{{ extension.description }}</div>
-            <div id="publisher">{{ extension.publisher }}</div>
+            <div id="publisher">Publisher: {{ extension.publisher }}</div>
         </div>
     </div>
 </template>

@@ -56,7 +56,7 @@ const uploadCommand = async (args: UploadCommandArgs) => {
 
     const formdata = new FormData();
     formdata.append('vsix', await readFile(vsixFile), { filename: vsixFile });
-    const uploadResponse = await axios.post(new URL('/vsix', registry).toString(),
+    const uploadResponse: AxiosResponse = await axios.post(new URL('/vsix', registry).toString(),
         formdata,
         {
             onUploadProgress: (ev) => {
@@ -69,14 +69,14 @@ const uploadCommand = async (args: UploadCommandArgs) => {
             return e.response;
         });
 
-    if (uploadResponse.statusCode === 200) {
+    if (uploadResponse.status === 200) {
         console.log(`Successfully uploaded the extension to "${registryName}":
     Publisher: ${uploadResponse.data.vsix.publisher}
     Name: ${uploadResponse.data.vsix.name}
     Version: ${uploadResponse.data.version}`);
     } else {
         return Promise.reject(`Cannot upload extension to "${registryName}":
-    Error: ${uploadResponse.data.message}`);
+    Error (${uploadResponse.status}): ${uploadResponse.data.message}`);
     }
 }
 

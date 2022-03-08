@@ -12,7 +12,7 @@
 	"activationEvents": [
 		"onStartupFinished"
 	],
-	"main": "./out/extension.js",
+	"main": "out/extension.js",
 	"contributes": {
 		"configuration": {
 			"title": "vspXr",
@@ -56,9 +56,8 @@
 		"pretest": "npm run compile-tests && npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
-		"install": "npm ci",
 		"build-ui": "npm run build --prefix vspXr-ui/",
-		"install-ui": "npm run install --prefix vspXr-ui/"
+		"install-ui": "npm install --prefix vspXr-ui/"
 	},
 	"devDependencies": {
 		"@types/vscode": "^1.65.0",
