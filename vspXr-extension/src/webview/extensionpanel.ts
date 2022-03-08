@@ -57,6 +57,8 @@ export class ExtensionPanel implements WebviewViewProvider {
 
             if ('install' in message) {
                 console.log(message.install);
+                // TODO: Add download of vsix.
+                // TODO: Add installation of vsix.
             }
         });
 
