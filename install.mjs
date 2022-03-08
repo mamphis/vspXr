@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 
 import child_process from 'child_process';
+
+let verb = 'install';
+
+if (process.argv.includes('--ci')) {
+    verb = 'ci';
+}
+
 if (process.platform === "win32") {
     child_process.exec('npm config set "msvs_version" "2019"');
     child_process.exec('npm config set "msbuild_path" "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe"');
@@ -17,7 +24,7 @@ function out(cmd) {
     }
 }
 
-child_process.exec('npm run install --prefix vspXr-server', out("install server"));
-child_process.exec('npm run install --prefix vspXr-extension', out("install extension"));
-child_process.exec('npm run install --prefix vspXr-cli', out("install cli"));
-child_process.exec('npm run install-ui --prefix vspXr-extension', out("installui extension"));
+child_process.exec(`npm ${verb} --prefix vspXr-server`, out("install server"));
+child_process.exec(`npm ${verb} --prefix vspXr-extension`, out("install extension"));
+child_process.exec(`npm ${verb} --prefix vspXr-cli`, out("install cli"));
+child_process.exec(`npm ${verb} --prefix vspXr-extension/vspXr-ui`, out("installui extension"));
