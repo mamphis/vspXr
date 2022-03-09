@@ -26,6 +26,7 @@ export type Metadata = {
     Categories: string;
     GalleryFlags: string;
     Properties: Properties;
+    Icon: string;
 };
 
 export type Installation = {

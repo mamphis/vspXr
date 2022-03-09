@@ -12,6 +12,9 @@ export class VsixVersion {
     @Column()
     version!: string;
 
+    @Column({ default: '' })
+    description!: string;
+
     get filename() {
         return `${this.vsix.publisher}.${this.vsix.name}-${this.version}.vsix`;
     }

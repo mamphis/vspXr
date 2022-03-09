@@ -5,7 +5,7 @@ import { VsixVersion } from "../../model/vsixversion";
 import { BasicDAO } from "../basicdao";
 import { Database, VsixDAO, VsixVersionDAO } from "../database";
 
-export class SqliteDatabase implements Database {
+export class SqlJsDatabase implements Database {
     vsix: VsixDAO = new BasicDAO(Vsix);
     vsixVersion: VsixVersionDAO = new BasicDAO(VsixVersion);
 
@@ -15,8 +15,9 @@ export class SqliteDatabase implements Database {
 
     async init(): Promise<void> {
         const connection = await createConnection({
-            type: 'better-sqlite3',
-            database: this.dataPath,
+            type: 'sqljs',
+            location: this.dataPath,
+            autoSave: true,
             entities: [
                 "out/model/**/*{.ts,.js}",
                 // "src/model/**/*{.ts,.js}"

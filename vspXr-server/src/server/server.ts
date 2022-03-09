@@ -1,6 +1,8 @@
+import cors from 'cors';
 import express, { Application, json, NextFunction, Request, Response, urlencoded } from "express";
 import { isHttpError, NotFound } from 'http-errors';
 import { LogManager } from "../lib/logger";
+import assetsRouter from './routes/assets.router';
 import infoRouter from './routes/info.router';
 import vsixRouter from './routes/vsix.router';
 
@@ -14,6 +16,7 @@ export class Server {
 
     async init(): Promise<void> {
         this.app.use(json());
+        this.app.use(cors());
         this.app.use(urlencoded({
             extended: false,
         }));
@@ -22,6 +25,7 @@ export class Server {
 
         this.app.use('/info', infoRouter);
         this.app.use('/vsix', vsixRouter);
+        this.app.use('/assets', assetsRouter);
 
         this.app.use((req, res, next) => {
             next(new NotFound(`${req.originalUrl} was not found.`));

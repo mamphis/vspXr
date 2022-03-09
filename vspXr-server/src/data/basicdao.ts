@@ -1,4 +1,4 @@
-import { DeepPartial, EntityManager, EntityTarget, FindConditions, FindManyOptions, FindOneOptions, getConnection, ObjectLiteral, Repository } from "typeorm";
+import { DeepPartial, EntityManager, EntityTarget, FindConditions, FindManyOptions, FindOneOptions, getConnection, ObjectLiteral, QueryBuilder, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { BasicDAO as InterfaceDAO } from "./database";
 
@@ -56,5 +56,9 @@ export class BasicDAO<T> implements InterfaceDAO<T> {
 
     async find(value: FindConditions<T> | FindManyOptions<T>): Promise<T[]> {
         return this.repo.find(value)
+    }
+
+    get builder(): QueryBuilder<T> {
+        return this.repo.createQueryBuilder();
     }
 }

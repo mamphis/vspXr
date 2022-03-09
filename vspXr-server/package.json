@@ -13,13 +13,17 @@
   "author": "mwacker",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/http-errors": "^1.8.2",
     "@types/multer": "^1.4.7",
     "@types/node": "^17.0.21",
-    "@types/pkginfo": "^0.4.0"
+    "@types/pkginfo": "^0.4.0",
+    "@types/semver": "^7.3.9"
   },
   "dependencies": {
+    "axios": "^0.26.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "fast-xml-parser": "^4.0.5",
@@ -28,7 +32,8 @@
     "moment": "^2.29.1",
     "multer": "^1.4.4",
     "pkginfo": "^0.4.1",
-    "sqlite3": "^4.2.0",
+    "semver": "^7.3.5",
+    "sql.js": "^1.6.2",
     "typeorm": "^0.2.41"
   }
 }

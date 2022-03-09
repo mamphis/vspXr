@@ -1,21 +1,66 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from "vue";
+import Searchbar from "./components/Searchbar.vue";
+import ExtensionList from "./components/ExtensionList.vue";
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+    <div id="container">
+        <searchbar />
+        <extension-list />
+    </div>
 </template>
 
 <style>
+html,
+body,
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#app * {
+    font-size: var(--vscode-font-size);
+    font-weight: var(--vscode-font-weight);
+    font-family: var(--vscode-font-family);
+}
+
+button.small {
+    font-size: small !important;
+}
+
+button {
+    cursor: pointer;
+    border-radius: 0;
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    border-color: var(--vscode-button-border);
+    border-style: solid;
+    border-width: 1px;
+}
+
+button:hover {
+    background: var(--vscode-button-hoverBackground);
+}
+
+input {
+    background: var(--vscode-input-background);
+    border-color: var(--vscode-input-border);
+    color: var(--vscode-input-foreground);
+    border-style: solid;
+    border-width: 1px;
+}
+::placeholder {
+    color: var(--vscode-input-placeholderForeground);
+}
+</style>
+
+<style scoped>
+#container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
 }
 </style>
