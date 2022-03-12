@@ -63,6 +63,7 @@
 		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.1.0",
 		"@types/node": "14.x",
+		"@types/semver": "^7.3.9",
 		"@types/vscode": "^1.65.0",
 		"@typescript-eslint/eslint-plugin": "^5.12.1",
 		"@typescript-eslint/parser": "^5.12.1",
@@ -76,6 +77,7 @@
 		"webpack-cli": "^4.9.2"
 	},
 	"dependencies": {
-		"axios": "^0.26.0"
+		"axios": "^0.26.0",
+		"semver": "^7.3.5"
 	}
 }

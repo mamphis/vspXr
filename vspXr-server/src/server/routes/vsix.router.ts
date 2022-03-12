@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { readFile } from "fs/promises";
-import { BadRequest, InternalServerError } from 'http-errors';
+import { BadRequest, InternalServerError, NotFound } from 'http-errors';
 import { VsixManager } from "../../lib/vsix";
 import multer from "multer";
 import { database } from "../..";
@@ -59,5 +59,16 @@ router.get('/', async (req, res, next) => {
     }
 });
 
+router.get('/:id', async (req, res, next) => {
+    const extension = await database.vsix.get(req.params.id, { relations: ['versions'] });
+
+    if (!extension) {
+        return next(new NotFound());
+    }
+    extension.versions.forEach(v => { delete v.vsix });
+
+    const latestVersion = extension.versions.sort((c1, c2) => compare(c2.version, c1.version))[0];
+    res.json({ ...extension, latestVersion });
+})
 
 export default router;
