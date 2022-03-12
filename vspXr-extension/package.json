@@ -6,6 +6,7 @@
 	"engines": {
 		"vscode": "^1.65.0"
 	},
+	"publisher": "mamphis",
 	"categories": [
 		"Other"
 	],
@@ -45,6 +46,9 @@
 				}
 			]
 		}
+	},
+	"repository": {
+		"url": "https://github.com/mamphis/vspXr"
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
