@@ -9,6 +9,7 @@ export class ExtensionPanel implements WebviewViewProvider {
 
     resolveWebviewView(webviewView: WebviewView, context: WebviewViewResolveContext<unknown>, token: CancellationToken): void | Thenable<void> {
         console.log("Try to resolve webview...");
+        this.extensionManager.processUpdates()
         webviewView.webview.options = {
             enableScripts: true
         };
