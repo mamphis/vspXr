@@ -1,0 +1,21 @@
+{
+  "name": "vspxr-ui",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vspxr-extension": "file:..",
+    "vue": "^3.2.25"
+  },
+  "devDependencies": {
+    "@types/vscode-webview": "^1.57.0",
+    "@vitejs/plugin-vue": "^2.2.0",
+    "typescript": "^4.5.4",
+    "vite": "^2.8.0",
+    "vue-tsc": "^0.29.8"
+  }
+}

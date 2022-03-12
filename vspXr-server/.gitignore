@@ -1,0 +1,6 @@
+packages.db*
+.env
+
+packages/**
+upload/**
+assets/**
