@@ -7,7 +7,7 @@ export class VsixVersion {
     id!: string;
 
     @ManyToOne(() => Vsix, vsix => vsix.versions)
-    vsix!: Vsix;
+    vsix?: Vsix;
 
     @Column()
     version!: string;
@@ -16,6 +16,6 @@ export class VsixVersion {
     description!: string;
 
     get filename() {
-        return `${this.vsix.publisher}.${this.vsix.name}-${this.version}.vsix`;
+        return `${this.vsix?.publisher}.${this.vsix?.name}-${this.version}.vsix`;
     }
 }

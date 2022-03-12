@@ -1,9 +1,31 @@
 <script setup lang="ts">
+import { ref } from "@vue/reactivity";
 import { vscode } from "../lib/vscode";
 import { Extension } from "../model/extension";
-
+console.log("Loaded extension");
 const props = defineProps<{ extension: Extension }>();
+const installing = ref(false);
+
+window.addEventListener("message", (ev) => {
+    const { type, content } = ev.data;
+    switch (type) {
+        case "extensionInstalled":
+            if (
+                content.id === props.extension.id &&
+                content.publisher === props.extension.publisher
+            ) {
+                props.extension.installed = true;
+            }
+            break;
+    }
+});
+
 function installExtension() {
+    if (installing.value) {
+        return;
+    }
+
+    installing.value = true;
     vscode.postMessage({ install: { ...props.extension } });
 }
 </script>
@@ -23,9 +45,10 @@ function installExtension() {
                 id="install"
                 class="small"
                 v-if="!extension.installed"
+                :class="{ installing: installing }"
                 @click="installExtension()"
             >
-                Install
+                <span>Install</span>
             </button>
         </div>
     </div>
@@ -60,7 +83,7 @@ function installExtension() {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     overflow: hidden;
 }
 
@@ -89,5 +112,43 @@ function installExtension() {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+
+#install {
+    position: relative;
+}
+
+.installing {
+    cursor: not-allowed;
+}
+
+.installing > span {
+    visibility: hidden;
+}
+
+.installing::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+
+    to {
+        transform: rotate(1turn);
+    }
 }
 </style>

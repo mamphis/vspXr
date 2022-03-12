@@ -2,6 +2,10 @@
 import { ref } from "vue";
 import Searchbar from "./components/Searchbar.vue";
 import ExtensionList from "./components/ExtensionList.vue";
+import { vscode } from "./lib/vscode";
+let state = vscode.getState();
+
+vscode.postMessage({ search: state?.searchValue ?? "" });
 </script>
 
 <template>
@@ -37,7 +41,7 @@ button {
     background: var(--vscode-button-background);
     color: var(--vscode-button-foreground);
     border-color: var(--vscode-button-border);
-    border-style: solid;
+    border-style: none;
     border-width: 1px;
 }
 

@@ -1,12 +1,15 @@
 import axios from 'axios';
-import { CancellationToken, extensions, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, workspace } from 'vscode';
+import { CancellationToken, commands, extensions, Uri, Webview, WebviewView, WebviewViewProvider, WebviewViewResolveContext, workspace } from 'vscode';
+import { ExtensionManager } from '../lib/extensionmanager';
+import { Extension } from '../model/extension';
 
 export class ExtensionPanel implements WebviewViewProvider {
-    constructor(private extensionUri: Uri) {
+    constructor(private extensionUri: Uri, private extensionManager: ExtensionManager) {
     }
 
     resolveWebviewView(webviewView: WebviewView, context: WebviewViewResolveContext<unknown>, token: CancellationToken): void | Thenable<void> {
         console.log("Try to resolve webview...");
+        this.extensionManager.processUpdates()
         webviewView.webview.options = {
             enableScripts: true
         };
@@ -24,46 +27,51 @@ export class ExtensionPanel implements WebviewViewProvider {
             }
         })
 
+        const searchAndSetExtensions = (searchQuery: string) => {
+            Promise.all(registries.map((registry) => {
+                const url = new URL("vsix", registry);
+                url.searchParams.set("query", searchQuery);
 
-        webviewView.webview.onDidReceiveMessage((message) => {
-            if ('search' in message) {
-                Promise.all(registries.map((registry) => {
-                    const url = new URL("vsix", registry);
-                    url.searchParams.set("query", message.search);
-
-                    return axios.get(url.toString())
-                        .then((r) => r.data.map((ext: any) => {
-                            return {
-                                ...ext,
-                                icon: new URL(`assets/${ext.id}/icon`, registry).toString(),
-                            }
-                        }))
-                        .catch((error) => {
-                            console.warn(
-                                `Cannot request registry [${registry}]: ${error}`
-                            );
-                            return [];
-                        });
-                })).then((exts: any[][]) => {
-                    exts = exts.flatMap(ext => {
-                        return ext.map(e => ({
-                            ...e,
-                            installed: !!extensions.getExtension(`${e.publisher}.${e.id}`),
-                        }));
+                return axios.get(url.toString())
+                    .then((r) => r.data.map((ext: Partial<Extension>) => {
+                        return {
+                            ...ext,
+                            icon: new URL(`assets/${ext.id}/icon`, registry).toString(),
+                            registry,
+                        }
+                    }))
+                    .catch((error) => {
+                        console.warn(
+                            `Cannot request registry [${registry}]: ${error}`
+                        );
+                        return [];
                     });
-                    webviewView.webview.postMessage({ type: 'setExtensions', content: exts });
+            })).then((exts: Partial<Extension>[][]) => {
+                const flatExtensions = exts.flatMap(ext => {
+                    return ext.map(e => ({
+                        ...e,
+                        installed: !!extensions.getExtension(`${e.publisher}.${e.id}`),
+                    }));
                 });
+                webviewView.webview.postMessage({ type: 'setExtensions', content: flatExtensions });
+            });
+        }
+
+        webviewView.webview.onDidReceiveMessage(async (message) => {
+            if ('search' in message) {
+                searchAndSetExtensions(message.search);
             }
 
             if ('install' in message) {
-                console.log(message.install);
-                // TODO: Add download of vsix.
-                // TODO: Add installation of vsix.
+                await this.extensionManager.downloadAndInstallExtension(message.install);
+                webviewView.webview.postMessage({ type: 'extensionInstalled', content: message.install });
+                commands.executeCommand('extension.open', `${message.install.publisher}.${message.install.id}`);
             }
         });
 
         webviewView.webview.postMessage({ type: 'setSearchValue', content: '' });
         updateRegistries();
+        searchAndSetExtensions('');
     }
 
     private getUri(webview: Webview, filename: string) {

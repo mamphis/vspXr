@@ -6,4 +6,5 @@ export interface Extension {
     version: string;
     installed: boolean;
     icon: string;
+    registry: string;
 }
