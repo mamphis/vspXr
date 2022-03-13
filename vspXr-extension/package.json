@@ -2,7 +2,7 @@
 	"name": "vspxr-extension",
 	"displayName": "vspXr-extension",
 	"description": "Extension to interact with the private extension server of vspXr",
-	"version": "0.0.1",
+	"version": "0.1.2",
 	"engines": {
 		"vscode": "^1.65.0"
 	},
