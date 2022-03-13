@@ -88,6 +88,11 @@ jobs:
         working-directory: vspXr-server
         id: build_server
         run: tsc
+        
+      - name: Remove node_modules
+        working-directory: vspXr-server
+        id: remove_server_node_modules
+        run: rm -rf ./node_modules
 
       - uses: actions/upload-artifact@master
         with:
