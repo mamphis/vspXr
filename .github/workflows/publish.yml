@@ -149,9 +149,6 @@ jobs:
         id: install_extension_dependencies
         run: npm ci
 
-      - run: vsce package
-        working-directory: vspXr-extension
-
       - run: vsce publish -p $VSCE_TOKEN
         working-directory: vspXr-extension
         env:
@@ -174,5 +171,5 @@ jobs:
         id: create_release
         with:
           files: |
-            - vspXr-server/vspXr-server.zip
+            **/vspXr-server.zip
           tag_name: v${{ steps.package-version.outputs.current-version }}
