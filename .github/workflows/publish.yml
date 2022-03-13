@@ -9,7 +9,6 @@ jobs:
   build_cli:
     name: Build CLI
     runs-on: ubuntu-latest
-    concurrency: "build-stage"
     steps:
       - uses: actions/checkout@v2
 
@@ -35,7 +34,6 @@ jobs:
   build_extension:
     name: Build Extension
     runs-on: ubuntu-latest
-    concurrency: "build-stage"
     steps:
       - uses: actions/checkout@v2
 
@@ -71,7 +69,6 @@ jobs:
   build_server:
     name: Build Server
     runs-on: ubuntu-latest
-    concurrency: "build-stage"
     steps:
       - uses: actions/checkout@v2
 
