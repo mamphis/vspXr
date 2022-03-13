@@ -163,10 +163,9 @@ jobs:
         with:
           path: vspXr-server
 
-      - uses: SierraSoftworks/gh-releases@v1.0.6
+      - uses: softprops/action-gh-release@v1
         id: create_release
         with:
-          token: ${{ github.token }}
           files: |
-            - vspXr-server/
-          release_tag: ${{ steps.package-version.outputs.current-version }}
+            - vspXr-server/**
+          tag_name: v${{ steps.package-version.outputs.current-version }}
