@@ -2,13 +2,15 @@
 vscode package eXtension registry - the VSCode Extension Registry for private packages.
 
 ## Roadmap
-- Auto-Update
-- Search of extensions
-- Display extensions Readme
-- Upload extension
-    - First without login
+- [x] Auto-Update
+- [x] Search of extensions
+- [x] Display extensions Readme
+- [ ] Upload extension
+    - [x] First without login
     - Adding authentication
-- Automatically extract Extension Info from VSIX
+- [x] Automatically extract Extension Info from VSIX
+- [ ] Add UI for Extension Server
+
 
 ### Server
 #### MVP
@@ -19,9 +21,11 @@ vscode package eXtension registry - the VSCode Extension Registry for private pa
 #### MVP
 - Search Extension
 - Install Extension
-- Uninstall Extension
 - Auto Update Extension
 
 ### Extension CLI
 #### MVP
 - Upload Extension
+
+
+
