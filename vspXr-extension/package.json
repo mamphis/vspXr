@@ -48,7 +48,9 @@
 		}
 	},
 	"repository": {
-		"url": "https://github.com/mamphis/vspXr"
+	  "type": "git",
+	  "url": "https://github.com/mamphis/vspXr.git",
+	  "directory": "vspXr-extension"
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run package",
