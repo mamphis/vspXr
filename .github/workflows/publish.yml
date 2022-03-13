@@ -46,12 +46,12 @@ jobs:
       - name: Install UI-Dependecies
         working-directory: vspXr-extension
         id: install_ui_dependencies
-        run: npm run install-ui
+        run: npm run install-ui-ci
 
       - name: Build UI
         working-directory: vspXr-extension
         id: build_ui
-        run: npm run build-ui-ci
+        run: npm run build-ui
 
       - name: Install Dependecies
         working-directory: vspXr-extension
