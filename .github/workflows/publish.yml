@@ -72,7 +72,7 @@ jobs:
         run: rm -rf ./node_modules
 
       - name: Remove node_modules in ui
-        working-directory: vspXr-extension
+        working-directory: vspXr-extension/vspXr-ui
         id: remove_extension_ui_node_modules
         run: rm -rf ./node_modules
 
