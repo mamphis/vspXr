@@ -63,7 +63,8 @@
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
 		"build-ui": "npm run build --prefix vspXr-ui/",
-		"install-ui": "npm install --prefix vspXr-ui/"
+		"install-ui": "npm install --prefix vspXr-ui/",
+		"install-ui-ci": "npm ci --prefix vspXr-ui/"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.2.0",
