@@ -61,7 +61,7 @@ jobs:
       - name: Build
         working-directory: vspXr-extension
         id: build_extension
-        run: npm run build
+        run: npm run compile
 
       - uses: actions/upload-artifact@master
         with:
