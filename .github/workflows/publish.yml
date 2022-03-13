@@ -95,7 +95,7 @@ jobs:
           path: vspXr-server/
   publish:
     runs-on: ubuntu-latest
-    needs: ["build-stage"]
+    needs: [build_cli, build_extension, build_server]
 
     steps:
       # Download produced artifacts
