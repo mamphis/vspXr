@@ -1,6 +1,6 @@
 {
   "name": "vspxr-server",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "The server that stores the vsix files and enables the search and interaction with private extensions",
   "main": "out/index.js",
   "scripts": {
@@ -10,6 +10,11 @@
   "keywords": [
     "extension"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mamphis/vspXr.git",
+    "directory": "vspXr-server"
+  },
   "author": "mwacker",
   "license": "ISC",
   "devDependencies": {

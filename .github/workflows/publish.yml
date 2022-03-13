@@ -1,0 +1,157 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_cli:
+    name: Build CLI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install Dependecies
+        working-directory: vspXr-cli
+        id: install_cli_dependencies
+        run: npm ci
+
+      - name: Build CLI
+        working-directory: vspXr-cli
+        id: build_cli
+        run: tsc
+
+      - name: Remove node_modules
+        working-directory: vspXr-cli
+        id: remove_server_node_modules
+        run: rm -rf ./node_modules
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: artifact-cli
+          path: vspXr-cli/
+
+  build_extension:
+    name: Build Extension
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install UI-Dependecies
+        working-directory: vspXr-extension
+        id: install_ui_dependencies
+        run: npm run install-ui-ci
+
+      - name: Build UI
+        working-directory: vspXr-extension
+        id: build_ui
+        run: npm run build-ui
+
+      - name: Install Dependecies
+        working-directory: vspXr-extension
+        id: install_extension_dependencies
+        run: npm ci
+
+      - name: Build
+        working-directory: vspXr-extension
+        id: build_extension
+        run: npm run compile
+        
+      - name: Remove node_modules
+        working-directory: vspXr-extension
+        id: remove_server_node_modules
+        run: rm -rf ./node_modules
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: artifact-extension
+          path: vspXr-extension/
+
+  build_server:
+    name: Build Server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install Dependecies
+        working-directory: vspXr-server
+        id: install_server_dependecies
+        run: npm ci
+
+      - name: Build Server
+        working-directory: vspXr-server
+        id: build_server
+        run: tsc
+        
+      - name: Remove node_modules
+        working-directory: vspXr-server
+        id: remove_server_node_modules
+        run: rm -rf ./node_modules
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: artifact-server
+          path: vspXr-server/
+  publish:
+    runs-on: ubuntu-latest
+    needs: [build_cli, build_extension, build_server]
+
+    steps:
+      # Download produced artifacts
+      - uses: actions/download-artifact@master
+        with:
+          name: artifact-server
+          path: vspXr-server/
+
+      - uses: actions/download-artifact@master
+        with:
+          name: artifact-cli
+          path: vspXr-cli/
+
+      - uses: actions/download-artifact@master
+        with:
+          name: artifact-extension
+          path: vspXr-extension/
+
+      # Publish cli to npmjs registry
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: vspXr-cli/package.json
+
+      # Package and publish extension to vscode marketplace
+      - uses: lannonbr/vsce-action@3.0.0
+        with:
+          args: "package"
+
+      - uses: lannonbr/vsce-action@3.0.0
+        with:
+          args: "publish -p $VSCE_TOKEN"
+        env:
+          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+
+      - uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          artifacts: 
+            artifact-server
+          prerelease: false
+          release_name: ${{ steps.version.outputs.version }}
+          tag_name: ${{ github.ref }}
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
