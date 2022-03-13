@@ -28,7 +28,7 @@ jobs:
 
       - name: Remove node_modules
         working-directory: vspXr-cli
-        id: remove_server_node_modules
+        id: remove_cli_node_modules
         run: rm -rf ./node_modules
 
       - uses: actions/upload-artifact@master
@@ -65,10 +65,15 @@ jobs:
         working-directory: vspXr-extension
         id: build_extension
         run: npm run compile
-        
+
       - name: Remove node_modules
         working-directory: vspXr-extension
-        id: remove_server_node_modules
+        id: remove_extension_node_modules
+        run: rm -rf ./node_modules
+
+      - name: Remove node_modules in ui
+        working-directory: vspXr-extension/vspXr-ui
+        id: remove_extension_ui_node_modules
         run: rm -rf ./node_modules
 
       - uses: actions/upload-artifact@master
@@ -95,7 +100,7 @@ jobs:
         working-directory: vspXr-server
         id: build_server
         run: tsc
-        
+
       - name: Remove node_modules
         working-directory: vspXr-server
         id: remove_server_node_modules
@@ -133,13 +138,22 @@ jobs:
           package: vspXr-cli/package.json
 
       # Package and publish extension to vscode marketplace
-      - uses: lannonbr/vsce-action@3.0.0
+      - uses: actions/setup-node@v2
         with:
-          args: "package"
+          node-version: 16
 
-      - uses: lannonbr/vsce-action@3.0.0
-        with:
-          args: "publish -p $VSCE_TOKEN"
+      - run: npm install -g vsce
+
+      - name: Install Dependecies
+        working-directory: vspXr-extension
+        id: install_extension_dependencies
+        run: npm ci
+
+      - run: vsce package
+        working-directory: vspXr-extension
+
+      - run: vsce publish -p $VSCE_TOKEN
+        working-directory: vspXr-extension
         env:
           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
 
@@ -147,8 +161,7 @@ jobs:
         id: create_release
         with:
           draft: false
-          artifacts: 
-            artifact-server
+          artifacts: artifact-server
           prerelease: false
           release_name: ${{ steps.version.outputs.version }}
           tag_name: ${{ github.ref }}
