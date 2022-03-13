@@ -149,24 +149,27 @@ jobs:
         id: install_extension_dependencies
         run: npm ci
 
-      - run: vsce package
-        working-directory: vspXr-extension
-
       - run: vsce publish -p $VSCE_TOKEN
         working-directory: vspXr-extension
         env:
           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
 
+      - name: Install zip
+        uses: montudor/action-zip@v1
+
+      - name: Zip output
+        run: zip -qq -r vspXr-server.zip out package.json install.md
+        working-directory: vspXr-server
+      
       - name: get-npm-version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
         with:
-          path: vspXr-server/package.json
+          path: vspXr-server
 
-      - uses: SierraSoftworks/gh-releases@v1.0.6
+      - uses: softprops/action-gh-release@v1
         id: create_release
         with:
-          token: ${{ github.token }}
           files: |
-            - vspXr-server/
-          release_tag: ${{ steps.package-version.outputs.current-version }}
+            **/vspXr-server.zip
+          tag_name: v${{ steps.package-version.outputs.current-version }}
