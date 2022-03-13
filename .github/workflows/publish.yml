@@ -26,6 +26,11 @@ jobs:
         id: build_cli
         run: tsc
 
+      - name: Remove node_modules
+        working-directory: vspXr-server
+        id: remove_server_node_modules
+        run: rm -rf ./node_modules
+
       - uses: actions/upload-artifact@master
         with:
           name: artifact-cli
@@ -60,6 +65,11 @@ jobs:
         working-directory: vspXr-extension
         id: build_extension
         run: npm run compile
+        
+      - name: Remove node_modules
+        working-directory: vspXr-server
+        id: remove_server_node_modules
+        run: rm -rf ./node_modules
 
       - uses: actions/upload-artifact@master
         with:
