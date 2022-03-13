@@ -65,7 +65,7 @@ jobs:
         working-directory: vspXr-extension
         id: build_extension
         run: npm run compile
-        
+
       - name: Remove node_modules
         working-directory: vspXr-extension
         id: remove_extension_node_modules
@@ -100,7 +100,7 @@ jobs:
         working-directory: vspXr-server
         id: build_server
         run: tsc
-        
+
       - name: Remove node_modules
         working-directory: vspXr-server
         id: remove_server_node_modules
@@ -143,6 +143,11 @@ jobs:
           node-version: 16
 
       - run: npm install -g vsce
+
+      - name: Install Dependecies
+        working-directory: vspXr-extension
+        id: install_extension_dependencies
+        run: npm ci
 
       - run: vsce package
         working-directory: vspXr-extension
