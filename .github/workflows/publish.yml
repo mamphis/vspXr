@@ -157,14 +157,9 @@ jobs:
         env:
           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
 
-      - uses: actions/create-release@v1
+      - uses: SierraSoftworks/gh-releases@v1.0.6
         id: create_release
         with:
-          draft: false
-          artifacts: artifact-server
-          prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
-          tag_name: ${{ github.ref }}
-          body_path: CHANGELOG.md
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+          token: ${{ github.token }}
+          files: |
+            - vspXr-server/
