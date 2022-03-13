@@ -28,7 +28,7 @@ jobs:
 
       - name: Remove node_modules
         working-directory: vspXr-cli
-        id: remove_server_node_modules
+        id: remove_cli_node_modules
         run: rm -rf ./node_modules
 
       - uses: actions/upload-artifact@master
@@ -68,17 +68,12 @@ jobs:
         
       - name: Remove node_modules
         working-directory: vspXr-extension
-        id: remove_server_node_modules
-        run: rm -rf ./node_modules
-
-      - name: Remove node_modules
-        working-directory: vspXr-extension
-        id: remove_server_node_modules
+        id: remove_extension_node_modules
         run: rm -rf ./node_modules
 
       - name: Remove node_modules in ui
         working-directory: vspXr-extension
-        id: remove_server_node_modules
+        id: remove_extension_ui_node_modules
         run: rm -rf ./node_modules
 
       - uses: actions/upload-artifact@master
@@ -106,11 +101,6 @@ jobs:
         id: build_server
         run: tsc
         
-      - name: Remove node_modules
-        working-directory: vspXr-server
-        id: remove_server_node_modules
-        run: rm -rf ./node_modules
-
       - name: Remove node_modules
         working-directory: vspXr-server
         id: remove_server_node_modules
