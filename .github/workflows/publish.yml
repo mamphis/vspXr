@@ -27,7 +27,7 @@ jobs:
         run: tsc
 
       - name: Remove node_modules
-        working-directory: vspXr-server
+        working-directory: vspXr-cli
         id: remove_server_node_modules
         run: rm -rf ./node_modules
 
@@ -67,7 +67,7 @@ jobs:
         run: npm run compile
         
       - name: Remove node_modules
-        working-directory: vspXr-server
+        working-directory: vspXr-extension
         id: remove_server_node_modules
         run: rm -rf ./node_modules
 
