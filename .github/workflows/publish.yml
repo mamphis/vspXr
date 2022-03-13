@@ -158,7 +158,7 @@ jobs:
         uses: montudor/action-zip@v1
 
       - name: Zip output
-        run: zip -qq -r vspXr-server.zip out package.json install.md
+        run: zip -qq -r vspXr-server.zip out package.json install.md .env.sample
         working-directory: vspXr-server
       
       - name: get-npm-version
