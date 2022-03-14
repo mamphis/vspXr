@@ -6,14 +6,31 @@ import assetsRouter from './routes/assets.router';
 import infoRouter from './routes/info.router';
 import vsixRouter from './routes/vsix.router';
 
+/**
+ * The express server
+ *
+ * @export
+ * @class Server
+ */
 export class Server {
     private app: Application;
     private logger = LogManager.getLogger('Server');
 
+    /**
+     * Creates an instance of Server.
+     * @param {number} port The port the server will listen
+     * @memberof Server
+     */
     constructor(private port: number) {
         this.app = express();
     }
 
+    /**
+     * Initializes the server; Configure it and set up routes and logger
+     *
+     * @return {*}  {Promise<void>}
+     * @memberof Server
+     */
     async init(): Promise<void> {
         this.app.use(json());
         this.app.use(cors());
@@ -40,6 +57,12 @@ export class Server {
             return res.status(500).send(err);
         });
     }
+
+    /**
+     * Start the server
+     *
+     * @memberof Server
+     */
     start() {
         this.app.listen(this.port, () => {
             this.logger.info(`Started server on port ${this.port}`);
