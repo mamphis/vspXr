@@ -4,14 +4,20 @@ import { readdir, readFile, stat } from "fs/promises";
 import { basename, extname } from "path";
 import { compare, SemVer } from "semver";
 import { URL } from "url";
-import { Argv } from "yargs";
+import { Argv, CommandBuilder } from "yargs";
 import { loadConfig } from "../utils/configfilehelper";
 import { UploadCommandArgs } from "./commandargs";
 
-const uploadCommand = async (args: UploadCommandArgs) => {
+/**
+ * The handler for uploading an extension.
+ *
+ * @param {UploadCommandArgs} args The arguments provided by the yargs-parser
+ */
+const uploadCommand = async (args: UploadCommandArgs): Promise<void> => {
     let vsixFile: string | undefined;
     if (args.vsix) {
         try {
+            // When a vsix-file is provided check if it exists
             await stat(args.vsix);
         } catch {
             return Promise.reject(`"${args.vsix}" does not exist.`);
@@ -21,12 +27,15 @@ const uploadCommand = async (args: UploadCommandArgs) => {
     }
 
     if (!vsixFile) {
+        // If no vsixFile was found check the current directory if at least one vsix file
+        //    is present.
         const dirents = await readdir(process.cwd());
         const candidates = dirents.filter(dirent => extname(dirent) === '.vsix')
         if (candidates.length === 0) {
             return Promise.reject('The current directory does not contain a vsix file');
         }
 
+        // Sort the candidates by the version number and select the latest version.
         vsixFile = candidates.map(candidate => {
             const [_, versionPart] = /.*(\d+\.\d+\.\d+)\.vsix$/.exec(candidate) ?? ['', ''];
             return {
@@ -54,6 +63,7 @@ const uploadCommand = async (args: UploadCommandArgs) => {
 
     const { name: registryName } = response.data;
 
+    // Load the vsix file and send the file to the registy
     const formdata = new FormData();
     const vsixContent = await readFile(vsixFile);
     formdata.append('vsix', vsixContent, { filename: basename(vsixFile) });
@@ -72,6 +82,7 @@ const uploadCommand = async (args: UploadCommandArgs) => {
         });
 
     if (uploadResponse.status === 200) {
+        // The upload was successful
         console.log(`Successfully uploaded the extension to "${registryName}":
     Publisher: ${uploadResponse.data.vsix.publisher}
     Name: ${uploadResponse.data.vsix.name}
@@ -82,7 +93,14 @@ const uploadCommand = async (args: UploadCommandArgs) => {
     }
 }
 
-export const uploadCommandBuilder = (args: Argv) => {
+/**
+ * The Command Builder for the upload command. Specifies arguments and options for
+ * available for the upload command
+ *
+ * @param {Argv} args The argument parser provided by yargs
+ * @return {Argv} The argument parser with the arguments
+ */
+export const uploadCommandBuilder = (args: Argv): Argv<UploadCommandArgs> => {
     return args
         .positional('vsix', {
             description: 'The file to upload',

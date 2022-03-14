@@ -1,11 +1,13 @@
 import { ArgumentsCamelCase } from "yargs";
 
-interface CommandArgs extends ArgumentsCamelCase {
-    _: (string | number)[],
-    '$0': string;
-}
-
-export interface UploadCommandArgs extends CommandArgs {
+/**
+ * The command arguments used for the upload command
+ *
+ * @export
+ * @interface UploadCommandArgs
+ * @extends {ArgumentsCamelCase}
+ */
+export interface UploadCommandArgs extends ArgumentsCamelCase {
     vsix: string | undefined;
     registry: string | undefined;
 }
