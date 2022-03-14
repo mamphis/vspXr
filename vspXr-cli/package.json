@@ -19,7 +19,7 @@
     "cli"
   ],
   "author": "mwacker",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^17.0.21",
     "@types/semver": "^7.3.9",
