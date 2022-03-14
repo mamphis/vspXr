@@ -7,7 +7,8 @@
     "vspxr": "out/cli.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-doc": "typedoc --out ../docs/cli --entryPointStrategy expand ./src"
   },
   "repository": {
     "type": "git",

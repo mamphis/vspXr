@@ -2,10 +2,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { mkdir } from 'fs/promises';
-import { Database } from "./data/";
-import { SqlJsDatabase } from './data/impl/sqljs';
+import { Database, SqlJsDatabase } from "./data/";
+import { } from './data/impl/sqljs';
 import { addConsoleAppender } from "./lib/logger";
 import { Server } from "./server/server";
+
 
 // Add console appender to the logger
 addConsoleAppender();

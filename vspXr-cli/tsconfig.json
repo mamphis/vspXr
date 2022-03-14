@@ -100,5 +100,9 @@
   },
   "include": [
     "./src"
-  ]
+  ],
+  "typedocOptions": {
+    "entryPoints": ["src/cli.ts"],
+    "out": "../docs/cli"
+  }
 }

@@ -14,7 +14,13 @@
 		},
 		{
 			"path": ".github"
+		},
+		{
+			"path": "docs"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "docs",
+		"npm-scripts.showStartNotification": false
+	}
 }
