@@ -1,6 +1,6 @@
 {
   "name": "vspxr-server",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "The server that stores the vsix files and enables the search and interaction with private extensions",
   "main": "out/index.js",
   "scripts": {

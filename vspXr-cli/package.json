@@ -1,6 +1,6 @@
 {
   "name": "vspxr-cli",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "The CLI for interacting with the private extension registry",
   "main": "out/cli.js",
   "bin": {
