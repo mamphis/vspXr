@@ -1,13 +1,14 @@
 {
   "name": "vspxr-cli",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "The CLI for interacting with the private extension registry",
   "main": "out/cli.js",
   "bin": {
     "vspxr": "out/cli.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-doc": "typedoc --out ../docs/cli --entryPointStrategy expand ./src"
   },
   "repository": {
     "type": "git",

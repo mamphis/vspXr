@@ -2,10 +2,11 @@
 	"name": "vspxr-extension",
 	"displayName": "vspXr-extension",
 	"description": "Extension to interact with the private extension server of vspXr",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"engines": {
 		"vscode": "^1.65.0"
 	},
+	"icon": "res/privateExtension-dark.png",
 	"publisher": "mamphis",
 	"categories": [
 		"Other"
@@ -64,7 +65,8 @@
 		"test": "node ./out/test/runTest.js",
 		"build-ui": "npm run build --prefix vspXr-ui/",
 		"install-ui": "npm install --prefix vspXr-ui/",
-		"install-ui-ci": "npm ci --prefix vspXr-ui/"
+		"install-ui-ci": "npm ci --prefix vspXr-ui/",
+		"generate-doc": "typedoc --out ../docs/extension --entryPointStrategy expand ./src"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.2.0",

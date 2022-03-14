@@ -7,6 +7,7 @@ export function activate(context: ExtensionContext) {
 
 	const extManager = new ExtensionManager(context.globalState, context.globalStorageUri);
 
+	// Register the webview for the custom ExtensionPanel
 	window.registerWebviewViewProvider('vspXr-extension-explorer-view', new ExtensionPanel(context.extensionUri, extManager));
 }
 
