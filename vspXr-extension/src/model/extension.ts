@@ -1,3 +1,9 @@
+/**
+ * An interface which describes an extension for the extension manager
+ *
+ * @export
+ * @interface Extension
+ */
 export interface Extension {
     id: string;
     name: string;
@@ -9,6 +15,12 @@ export interface Extension {
     registry: string;
 }
 
+/**
+ * An interface which describes the extension on the server
+ *
+ * @export
+ * @interface ServerExtension
+ */
 export interface ServerExtension {
     id: string;
     publisher: string;
@@ -18,6 +30,12 @@ export interface ServerExtension {
     latestVersion: ServerExtensionVersion;
 }
 
+/**
+ * An interface which describes a version of the extension
+ *
+ * @export
+ * @interface ServerExtensionVersion
+ */
 export interface ServerExtensionVersion {
     id: string;
     version: string;
