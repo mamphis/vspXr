@@ -56,7 +56,7 @@ assetRouter.get('/:version', async (req, res, next) => {
 });
 
 router.use('/:id', async (req, res, next) => {
-    const vsix = await database.vsix.get(req.params.id)
+    const vsix = await database.vsix.get({ where: { id: req.params.id } })
 
     if (!vsix) {
         return next(new NotFound())

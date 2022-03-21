@@ -51,7 +51,7 @@ export class VsixManager {
 
         const vsixData = parser.parse(xml) as VSIX;
         const vsix = new Vsix();
-        
+
         vsix.publisher = vsixData.PackageManifest.Metadata.Identity.Publisher;
         vsix.id = vsixData.PackageManifest.Metadata.Identity.Id;
         vsix.name = vsixData.PackageManifest.Metadata.DisplayName;
@@ -81,7 +81,7 @@ export class VsixManager {
     async store(file: Express.Multer.File, vsixDefinition: Vsix): Promise<VsixVersion> {
         try {
             // Try to find a extension with the name and the publisher
-            let newVsix = await database.vsix.get(vsixDefinition.id, { relations: ['versions'] });
+            let newVsix = await database.vsix.get({ where: { id: vsixDefinition.id }, relations: ['versions'] });
 
             // No extenion found.
             if (!newVsix) {
@@ -95,7 +95,7 @@ export class VsixManager {
 
                 newVsix = insertedVsix;
             } else {
-                await database.vsix.update(vsixDefinition.id, { ...select(vsixDefinition, 'name', 'publisher', 'icon') })
+                await database.vsix.update({ where: { id: vsixDefinition.id } }, { ...select(vsixDefinition, 'name', 'publisher', 'icon') })
             }
 
             // Test if a version is present.
@@ -120,7 +120,7 @@ export class VsixManager {
                 description: newVersionDefinition.description
             });
 
-            const newVersion = await database.vsixVersion.get(newVersionId, { relations: ['vsix'] });
+            const newVersion = await database.vsixVersion.get({ where: { id: newVersionId }, relations: ['vsix'] });
 
             if (!newVersion) {
                 return Promise.reject(`The version ${newVersionDefinition.version} of the extension ${vsixDefinition.name} cannot be stored.`)

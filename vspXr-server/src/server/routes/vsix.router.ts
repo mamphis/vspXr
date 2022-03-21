@@ -27,6 +27,10 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
         );
 
         if (version) {
+            if (version.vsix) {
+                version.vsix.versions = [];
+            }
+
             return res.json(version);
         } else {
             return next(new InternalServerError('Cannot insert version'));
@@ -60,7 +64,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id', async (req, res, next) => {
-    const extension = await database.vsix.get(req.params.id, { relations: ['versions'] });
+    const extension = await database.vsix.get({ where: { id: req.params.id }, relations: ['versions'] });
 
     if (!extension) {
         return next(new NotFound());

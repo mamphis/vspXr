@@ -1,4 +1,4 @@
-import { DeepPartial, EntityManager, EntityTarget, FindConditions, FindManyOptions, FindOneOptions, getConnection, ObjectLiteral, QueryBuilder, Repository } from "typeorm";
+import { DeepPartial, EntityManager, EntityTarget, FindManyOptions, FindOneOptions, FindOptionsWhere, getConnection, ObjectLiteral, QueryBuilder, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { BasicDAO as InterfaceDAO } from "./database";
 
@@ -23,8 +23,8 @@ export class BasicDAO<T> implements InterfaceDAO<T> {
     constructor(private repoType: EntityTarget<T>) {
     }
 
-    async exists(id: string): Promise<boolean> {
-        return !!await this.get(id);
+    async exists(options: FindOneOptions<T>): Promise<boolean> {
+        return !!await this.get(options);
     }
 
     async create(entity: QueryDeepPartialEntity<T>): Promise<ObjectLiteral[]> {
@@ -40,21 +40,20 @@ export class BasicDAO<T> implements InterfaceDAO<T> {
         return this.repo.find();
     }
 
-    async get(id: string, options?: FindOneOptions<T>): Promise<T | undefined> {
-        return this.repo.findOne(id, options);
+    async get(options: FindOneOptions<T>): Promise<T | null> {
+        return this.repo.findOne(options);
     }
 
-    async update(id: string, entity: QueryDeepPartialEntity<T>): Promise<T | undefined> {
-        await this.repo.update(id, entity);
-
-        return this.get(id);
+    async update(options: FindOneOptions<T> & { where: FindOptionsWhere<T> }, entity: QueryDeepPartialEntity<T>): Promise<T | null> {
+        await this.repo.update(options.where, entity);
+        return this.get(options);
     }
 
     async delete(id: string): Promise<void> {
         await this.repo.delete(id);
     }
 
-    async find(value: FindConditions<T> | FindManyOptions<T>): Promise<T[]> {
+    async find(value: FindManyOptions<T>): Promise<T[]> {
         return this.repo.find(value)
     }
 
