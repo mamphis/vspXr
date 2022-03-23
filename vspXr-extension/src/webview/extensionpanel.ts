@@ -33,7 +33,7 @@ export class ExtensionPanel implements WebviewViewProvider {
     resolveWebviewView(webviewView: WebviewView, context: WebviewViewResolveContext<unknown>, token: CancellationToken): void | Thenable<void> {
         console.log("Try to resolve webview...");
         // Automatically process updates on start
-        this.extensionManager.processUpdates()
+        this.extensionManager.processUpdates();
 
         // Enable scripts in the extension webview
         webviewView.webview.options = {
@@ -56,9 +56,8 @@ export class ExtensionPanel implements WebviewViewProvider {
             if (configChangeEvent.affectsConfiguration('vspXr.privateRegistries')) {
                 updateRegistries();
             }
-        })
+        });
 
-        
         /**
          * Search all registries for extensions matching the the passed search Query
          *
@@ -69,6 +68,8 @@ export class ExtensionPanel implements WebviewViewProvider {
                 const url = new URL("vsix", registry);
                 url.searchParams.set("query", searchQuery);
 
+                // TODO: Get the Registry Info and store them in the Extension to display them in the UI
+
                 // Load all registries and map enrich them with the icon url and the registry where it came from
                 return axios.get(url.toString())
                     .then((r) => r.data.map((ext: Partial<Extension>) => {
@@ -76,7 +77,7 @@ export class ExtensionPanel implements WebviewViewProvider {
                             ...ext,
                             icon: new URL(`assets/${ext.id}/icon`, registry).toString(),
                             registry,
-                        }
+                        };
                     }))
                     .catch((error) => {
                         console.warn(
@@ -92,9 +93,11 @@ export class ExtensionPanel implements WebviewViewProvider {
                         installed: !!extensions.getExtension(`${e.publisher}.${e.id}`),
                     }));
                 });
+
+                // TODO: Dedupe the extensions.
                 webviewView.webview.postMessage({ type: 'setExtensions', content: flatExtensions });
             });
-        }
+        };
 
         // The message handler for the webview
         webviewView.webview.onDidReceiveMessage(async (message) => {
