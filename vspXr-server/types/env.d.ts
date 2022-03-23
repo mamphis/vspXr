@@ -7,5 +7,6 @@ declare namespace NodeJS {
         SQLJS_DATABASE: string;
         SERVER_PORT: number;
         REGISTRY_NAME: string;
+        BROADCAST_PORT: number;
     }
 }

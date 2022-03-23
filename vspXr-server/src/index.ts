@@ -6,6 +6,7 @@ import { Database, SqlJsDatabase } from "./data/";
 import { } from './data/impl/sqljs';
 import { addConsoleAppender } from "./lib/logger";
 import { Server } from "./server/server";
+import { BroadcastServer } from './server/udp/broadcastserver';
 
 
 // Add console appender to the logger
@@ -25,6 +26,8 @@ async function start() {
     // Start the server
     await server.init();
     await server.start();
+
+    const broadcastServer = new BroadcastServer(process.env.BROADCAST_PORT, process.env.SERVER_PORT)
 }
 
 start();
