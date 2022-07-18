@@ -75,7 +75,7 @@
 		"@types/node": "18.x",
 		"@types/semver": "^7.3.10",
 		"@types/vscode": "^1.68.0",
-		"@typescript-eslint/eslint-plugin": "^5.29.0",
+		"@typescript-eslint/eslint-plugin": "^5.30.6",
 		"@typescript-eslint/parser": "^5.29.0",
 		"@vscode/test-electron": "^2.1.4",
 		"eslint": "^8.18.0",
