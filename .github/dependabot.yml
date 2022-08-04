@@ -9,19 +9,19 @@ updates:
     directory: "/vspXr-cli" # Location of package manifests
     target-branch: dev
     schedule:
-      interval: "weekly"
+      interval: "monthly"
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/vspXr-server" # Location of package manifests
     target-branch: dev
     schedule:
-      interval: "weekly"
+      interval: "monthly"
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/vspXr-extension" # Location of package manifests
     target-branch: dev
     schedule:
-      interval: "weekly"
+      interval: "monthly"
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/vspXr-extension/vspXr-ui" # Location of package manifests
     target-branch: dev
     schedule:
-      interval: "weekly"
+      interval: "monthly"
