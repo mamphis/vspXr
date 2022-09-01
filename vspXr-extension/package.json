@@ -70,7 +70,7 @@
 		"generate-doc": "typedoc --out ../docs/extension --entryPointStrategy expand ./src"
 	},
 	"devDependencies": {
-		"@types/glob": "^7.2.0",
+		"@types/glob": "^8.0.0",
 		"@types/mocha": "^9.1.1",
 		"@types/node": "18.x",
 		"@types/semver": "^7.3.10",
