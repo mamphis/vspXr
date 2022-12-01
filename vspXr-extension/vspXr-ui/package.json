@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "vspxr-extension": "file:..",
-    "vue": "^3.2.37"
+    "vue": "^3.2.45"
   },
   "devDependencies": {
     "@types/node": "^18.6.3",
